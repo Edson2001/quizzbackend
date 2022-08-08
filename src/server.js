@@ -50,9 +50,7 @@ io.on('connection', (socket)=>{
                 io.emit("setUser", users)
 
             }
-
         })
-
     })
 
     socket.on("initGame", (time)=>{
