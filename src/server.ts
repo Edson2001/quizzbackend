@@ -1,10 +1,9 @@
-import express from "express";
-
+import express from "express"
 import http from "http"
-
 import {Server} from "socket.io"
 import cors from "cors"
-import questions from "./questions.js";
+import questions from "./questions"
+
 const app = express()
 
 const httpServer = http.Server(app)
@@ -63,9 +62,6 @@ io.on('connection', (socket)=>{
             })
             console.log(winner)
         }
-        //vencedor
-       
-
     })
 
     socket.on('nextQuestion', (userName)=>{
@@ -73,8 +69,6 @@ io.on('connection', (socket)=>{
         if(game.currentQuestionPostion < game.totalQuestion){
 
             if(game.selectedQuestion && game.selectedQuestion == game.currentQuestion.rightoption){
-
-                //toast.success('Boa! continua assim.')
                 console.log("fBoa! continua assimo")
 
                 const currentUser = game.users.find(user=> user.name === userName)
@@ -83,12 +77,10 @@ io.on('connection', (socket)=>{
                     currentUser.score += 5
                     currentUser.totalQuestionsCorret += 1
                 }
-                //socket.emit("setScore", {name: userName, score: 5, totalQuestionsCorret: 1})
                 console.log(game.users)
 
             }else{
-                //toast.error('Resposta errada, pode tentar denovo no final do jogo .')
-                console.log("Resposta errada,")
+                console.log("Resposta errada")
             }
 
             game.currentQuestionPostion += 1
@@ -96,7 +88,6 @@ io.on('connection', (socket)=>{
             let newQuestionPosition = game.currentQuestionPostion
            
             if(game.currentQuestionPostion == game.totalQuestion){
-                //toast.success('fim do jogo') 
                 console.log("fim de jogo")
                 return
             }
