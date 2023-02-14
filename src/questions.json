@@ -1,0 +1,11 @@
+{
+    "questions": [
+        {
+            "question": "store as they are bound to the store itself too:",
+            "options":{
+                "1": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, dicta? Adipisci dolores fugiat doloribus repudiandae"
+            },
+            "rightoption": 1
+        }
+    ]
+}

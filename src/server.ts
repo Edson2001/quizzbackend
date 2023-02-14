@@ -3,6 +3,9 @@ import http from "http"
 import {Server} from "socket.io"
 import cors from "cors"
 import questions from "./questions"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 const app = express()
 
@@ -128,10 +131,7 @@ io.on('connection', (socket)=>{
             }
 
         }
-        
-
     })
-
 })
 
-httpServer.listen(3030, ()=>console.log('Servidor rodando na porta 3030'))
+httpServer.listen(process.env.ENV_SERVER_PORT || 3030, ()=>console.log('Servidor rodando na porta http://localhost:3030'))
