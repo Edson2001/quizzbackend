@@ -4,8 +4,9 @@ import {Server} from "socket.io"
 import cors from "cors"
 import questions from "./questions"
 import dotenv from "dotenv"
-
+import { createUser, removeUser } from "./User/User.controller"
 dotenv.config()
+
 
 const app = express()
 
@@ -37,9 +38,12 @@ io.on('connection', (socket)=>{
         const userExist = users.find(item=> item.name === user.name)
         if(userExist){
             userExist.id = socket.id
+            console.log('user', userExist)
         }else{
             user.name = user.name
+            console.log(createUser({name: user.name, uuid: user.id}))
             users.push(user)
+            
         }
         
         console.log('Novo usuario no jogo '+socket.id)
@@ -111,20 +115,20 @@ io.on('connection', (socket)=>{
         
     })
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
 
         console.log('user disconnected');
         
         for(let i = 0; i < game.users.length; i++){
+            const userOut =  game.users[i]
+            if(userOut.id === socket.id){
 
-            if(game.users[i].id === socket.id){
-
-                console.log('Usuario '+game.users[i].name+ " Saiu do jogo")
+                console.log('Usuario '+userOut.name+ " Saiu do jogo")
                 
-                io.emit("userOut", game.users[i].name)
-
+                io.emit("userOut", userOut.name)
+                console.log(await removeUser(userOut.id))
                 game.users.splice(i, 1)
-
+                
                 io.emit('sendState', game)
                     
                     
