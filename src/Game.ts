@@ -1,14 +1,17 @@
 
 import { Socket, Server } from "socket.io"
-import questions from "./questions"
-import { createUser, removeUser } from "./User/User.controller"
-export default function game({socket, io}: {socket: Socket, io: Server}){
-
+import { listQuestions } from "./Questions/Questions.controller"
+export default async  function game({socket, io}: {socket: Socket, io: Server}){
+    
+    const questions = await listQuestions()
+    console.log(questions)
+    
     const game = {
         gameCountQuestion: 1,
         currentQuestionPostion: 0,
         totalQuestion: questions.length,
-        currentQuestion: questions[0],
+        //currentQuestion: questions[0] ?? [],
+        currentQuestion: questions[0] ?? [],
         selectedQuestion: null,
         users:[]
     }
@@ -23,16 +26,16 @@ export default function game({socket, io}: {socket: Socket, io: Server}){
             console.log('user', userExist)
         }else{
             user.name = user.name
-            console.log(createUser({name: user.name, uuid: user.id}))
             users.push(user)
             
         }
         
         console.log('Novo usuario no jogo '+socket.id)
         game.users = users
+        
         io.emit('sendState', game)
     })
-
+    console.log(game, 'game')
     socket.emit('sendState', game)
 
     socket.on('selectedQuestion', (selected)=>{
@@ -108,7 +111,7 @@ export default function game({socket, io}: {socket: Socket, io: Server}){
                 console.log('Usuario '+userOut.name+ " Saiu do jogo")
                 
                 io.emit("userOut", userOut.name)
-                console.log(await removeUser(userOut.id))
+                
                 game.users.splice(i, 1)
                 
                 io.emit('sendState', game)
